@@ -19,7 +19,7 @@ namespace plexwssync
         [Option('d', "DryRun", HelpText = "Shows you what would be changed without changing anything", Required = false)]
         public bool DryRun { get; set; }
 
-        [Option('q', "TraktUsername", HelpText = "To use Trakt as an additional Source for watche statuses you can provide a Trakt slug (Url encoded Username)", Required = false)]
+        [Option('q', "TraktUsername", HelpText = "To use Trakt as an additional Source for watched statuses you can provide a Trakt slug (Url encoded Username)", Required = false)]
         public string TraktUsername { get; set; }
 
     }
