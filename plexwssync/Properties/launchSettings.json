@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "plexsync": {
+      "commandName": "Project",
+      "commandLineArgs": "-m Shows -t aBb6yPnzsKW2A14HT6xg -q psychonoob -d"
+    }
+  }
+}

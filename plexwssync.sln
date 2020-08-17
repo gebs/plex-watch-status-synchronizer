@@ -1,0 +1,37 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30320.27
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "plexwssync", "plexwssync\plexwssync.csproj", "{9EDF8540-2FAD-4B2F-9D8A-82FCDD079C94}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "plexapi", "plexapi\plexapi.csproj", "{A39C1097-7089-4412-9BA3-318871229492}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "traktapi", "traktapi\traktapi.csproj", "{E9BCF367-4669-45A4-9092-ED3747A76267}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9EDF8540-2FAD-4B2F-9D8A-82FCDD079C94}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9EDF8540-2FAD-4B2F-9D8A-82FCDD079C94}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9EDF8540-2FAD-4B2F-9D8A-82FCDD079C94}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9EDF8540-2FAD-4B2F-9D8A-82FCDD079C94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A39C1097-7089-4412-9BA3-318871229492}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A39C1097-7089-4412-9BA3-318871229492}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A39C1097-7089-4412-9BA3-318871229492}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A39C1097-7089-4412-9BA3-318871229492}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E9BCF367-4669-45A4-9092-ED3747A76267}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E9BCF367-4669-45A4-9092-ED3747A76267}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E9BCF367-4669-45A4-9092-ED3747A76267}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E9BCF367-4669-45A4-9092-ED3747A76267}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C7E362CE-5869-4A7B-A297-B1D283932401}
+	EndGlobalSection
+EndGlobal
