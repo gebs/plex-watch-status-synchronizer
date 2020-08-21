@@ -19,6 +19,9 @@ namespace plexwssync
         [Option('d', "DryRun", HelpText = "Shows you what would be changed without changing anything", Required = false)]
         public bool DryRun { get; set; }
 
+        [Option('w', "WaitTime", HelpText = "Time in ms between requests to server", Required = false, Default = 100)]
+        public int WaitTime { get; set; }
+
         [Option('q', "TraktUsername", HelpText = "To use Trakt as an additional Source for watched statuses you can provide a Trakt slug (Url encoded Username)", Required = false)]
         public string TraktUsername { get; set; }
 

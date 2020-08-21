@@ -1,5 +1,4 @@
 ﻿using Newtonsoft.Json;
-using plexapi;
 using plexapi.Model.XML.Resources;
 using System;
 using System.Collections.Generic;
@@ -16,12 +15,14 @@ namespace plexapi
         private string token;
         private readonly string username;
         private readonly string password;
+        private readonly int waittime;
 
-        public PlexSynchronizer(string token, string username, string password)
+        public PlexSynchronizer(string token, string username, string password, int waittime)
         {
             this.token = token;
             this.username = username;
             this.password = password;
+            this.waittime = waittime;
 
             //Disable Server Certificate Validation
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
@@ -31,6 +32,7 @@ namespace plexapi
         {
             await EnsurePlexToken();
 
+            Console.WriteLine($"{DateTime.Now} - Reading Media from Plex");
             var all = await GetPlexMedia(add);
             var tmp = all.Where(x => x.Watched).ToList();
 
@@ -43,15 +45,17 @@ namespace plexapi
 
             var media2sync = unwatched.Intersect(watched, new PlexMediaComparer()).ToList();
 
+            Console.WriteLine($"{DateTime.Now} - Found Total: {tmp.Count}, watched: {watched.Count}, unwatched: {unwatched.Count}, tosync: {media2sync.Count}");
+
             foreach (var item in media2sync)
             {
                 if (dryrun)
-                    Console.WriteLine($"{item.Title} would be set watched on Server {item.MediaServer.Name}");
+                    Console.WriteLine($"{DateTime.Now} - {item.Title} would be set watched on Server {item.MediaServer.Name}");
                 else
                 {
-                    Console.WriteLine($"Setting {item.Title} watched on server {item.MediaServer.Name}");
+                    Console.WriteLine($"{DateTime.Now} - Setting {item.Title} watched on server {item.MediaServer.Name}");
                     var result = await item.SetWatched();
-                    Thread.Sleep(100);
+                    Thread.Sleep(waittime);
                 }
             }
 
@@ -97,6 +101,7 @@ namespace plexapi
                     continue;
 
                 PlexMediaServer mediaServer = new PlexMediaServer(server);
+
                 foreach (var library in (await PlexRequest(mediaServer.BaseUrl, "/library/sections", mediaServer.Token)).Directory)
                 {
                     if ((library.Type == "show" && typeof(T) == typeof(PlexEpisode))

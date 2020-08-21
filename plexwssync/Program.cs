@@ -1,5 +1,6 @@
 ﻿using CommandLine;
 using plexapi;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -15,8 +16,8 @@ namespace plexwssync
                 .WithParsedAsync(async o =>
                 {
                     TraktClient traktClient = new TraktClient(o.TraktUsername);
-                    PlexSynchronizer synchronizer = new PlexSynchronizer(o.PlexToken, o.PlexUsername, o.PlexPassword);
-
+                    PlexSynchronizer synchronizer = new PlexSynchronizer(o.PlexToken, o.PlexUsername, o.PlexPassword, o.WaitTime);
+                    Console.WriteLine(DateTime.Now + " - Starting synchronization");
                     if (o.MediaType == MediaType.Movies || o.MediaType == MediaType.All)
                     {
                         List<PlexMovie> traktwatchedMovies = null;
@@ -39,6 +40,7 @@ namespace plexwssync
                         }
                         await synchronizer.Synchronize(o.DryRun, (v, s) => new PlexEpisode(v, s), traktwatchedEpisodes);
                     }
+                    Console.WriteLine(DateTime.Now + " - Finished synchronization");
                 });
         }
 

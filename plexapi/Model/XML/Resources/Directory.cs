@@ -12,6 +12,9 @@ namespace plexapi.Model.XML.Resources
 		public int Key { get; set; }
 		[XmlAttribute(AttributeName = "type")]
 		public string Type { get; set; }
+		[XmlAttribute(AttributeName = "title")]
+		public string Name { get; set; }
+
 	}
 
 }
