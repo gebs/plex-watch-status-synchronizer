@@ -1,4 +1,5 @@
 ﻿using System.Net.Http;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace plexapi
@@ -10,6 +11,17 @@ namespace plexapi
         public string RatingKey { get; set; }
         public bool Watched { get; set; }
         public PlexMediaServer MediaServer { get; set; }
+        public string Id
+        {
+            get
+            {
+                if (string.IsNullOrEmpty(Guid))
+                    return null;
+
+                Regex regex = new Regex("//(?<id>[\\d\\w]*)");
+                return regex.Match(Guid).Groups["id"]?.Value;
+            }
+        }
 
 
         public async Task<bool> SetWatched()

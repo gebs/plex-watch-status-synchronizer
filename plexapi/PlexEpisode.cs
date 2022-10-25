@@ -24,7 +24,7 @@ namespace plexapi
             this.MediaServer = server;
         }
 
-        public PlexEpisode(int tvdbid, string title, int season, int episode, string show)
+        public PlexEpisode(string tvdbid, string title, int season, int episode, string show)
         {
             this.Guid = $"com.plexapp.agents.thetvdb://{tvdbid}/{season}/{episode}?lang=en";
             this.Season = season;

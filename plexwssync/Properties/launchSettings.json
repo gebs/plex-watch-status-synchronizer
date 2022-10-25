@@ -2,7 +2,7 @@
   "profiles": {
     "plexsync": {
       "commandName": "Project",
-      "commandLineArgs": "-m Movies -t aBb6yPnzsKW2A14HT6xg -q psychonoob -d"
+      "commandLineArgs": "-m Shows -t aBb6yPnzsKW2A14HT6xg -q psychonoob -d"
     }
   }
 }

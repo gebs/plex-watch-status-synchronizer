@@ -16,6 +16,8 @@ namespace plexapi
         private readonly string username;
         private readonly string password;
         private readonly int waittime;
+        private readonly PlexMediaComparer mediaComparer;
+        private List<PlexMedia> watchedOnlyPlex;
 
         public PlexSynchronizer(string token, string username, string password, int waittime)
         {
@@ -23,29 +25,23 @@ namespace plexapi
             this.username = username;
             this.password = password;
             this.waittime = waittime;
+            mediaComparer = new PlexMediaComparer();
 
             //Disable Server Certificate Validation
             ServicePointManager.ServerCertificateValidationCallback += (sender, cert, chain, sslPolicyErrors) => true;
         }
 
-        public async Task<bool> Synchronize<T>(bool dryrun, Func<Video, PlexMediaServer, T> add, List<T> watchedMedia = null) where T : PlexMedia
+        public async Task<bool> Synchronize<T>(bool dryrun, Func<Video, PlexMediaServer, T> add, List<T> traktWatchedMedia = null) where T : PlexMedia
         {
-            await EnsurePlexToken();
+            var (all, watched) = await GetPlexMediaLists(add, traktWatchedMedia);
 
-            Console.WriteLine($"{DateTime.Now} - Reading Media from Plex");
-            var all = await GetPlexMedia(add);
-            var tmp = all.Where(x => x.Watched).ToList();
-
-            if (watchedMedia != null)
-                tmp.AddRange(watchedMedia);
-
-            var watched = tmp.Distinct(new PlexMediaComparer()).ToList();
+            watchedOnlyPlex = watched.Except(traktWatchedMedia, mediaComparer).ToList();
 
             var unwatched = all.Where(x => !x.Watched).ToList();
 
-            var media2sync = unwatched.Intersect(watched, new PlexMediaComparer()).ToList();
+            var media2sync = unwatched.Intersect(watched, mediaComparer).ToList();
 
-            Console.WriteLine($"{DateTime.Now} - Found Total: {tmp.Count}, watched: {watched.Count}, unwatched: {unwatched.Count}, tosync: {media2sync.Count}");
+            Console.WriteLine($"{DateTime.Now} - Found Total: {all.Count}, watched: {watched.Count}, unwatched: {unwatched.Count}, tosync: {media2sync.Count}");
 
             foreach (var item in media2sync)
             {
@@ -54,12 +50,42 @@ namespace plexapi
                 else
                 {
                     Console.WriteLine($"{DateTime.Now} - Setting {item.Title} watched on server {item.MediaServer.Name}");
-                    var result = await item.SetWatched();
+
+                    await item.SetWatched();
+
                     Thread.Sleep(waittime);
                 }
             }
 
             return true;
+        }
+
+        public async Task<List<T>> GetTraktDelta<T>(Func<Video, PlexMediaServer, T> add, List<T> traktWatchedMedia) where T : PlexMedia
+        {
+            //if (null == watchedOnlyPlex)
+            //{
+            var (_, watched) = await GetPlexMediaLists(add, traktWatchedMedia);
+            return watched.Except(traktWatchedMedia, mediaComparer).Select(x => (T)x).ToList();
+            // watchedOnlyPlex = watched.Except(traktWatchedMedia, mediaComparer).Select(x => (T)x).ToList();
+            //}
+
+            //  return watchedOnlyPlex;
+        }
+
+        private async Task<(List<T> all, List<T> watched)> GetPlexMediaLists<T>(Func<Video, PlexMediaServer, T> add, List<T> traktWatchedMedia = null) where T : PlexMedia
+        {
+            await EnsurePlexToken();
+
+            Console.WriteLine($"{DateTime.Now} - Reading Media from Plex");
+            var all = await GetPlexMedia(add);
+            var tmp = all.Where(x => x.Watched).ToList();
+
+            if (traktWatchedMedia != null)
+                tmp.AddRange(traktWatchedMedia);
+
+            var watched = tmp.Distinct(mediaComparer).Select(x => (T)x).ToList();
+
+            return (all, watched);
         }
 
         private async Task EnsurePlexToken()
